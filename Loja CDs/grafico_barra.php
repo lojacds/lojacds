@@ -1,44 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['bar']});
-      google.charts.setOnLoadCallback(drawChart);
+        google.charts.load('current', {'packages':['bar']});
+        google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Produto');
-        data.addColumn('number', 'Quantidade Vendida');
+        function drawChart() {
+            // Este é um exemplo de dados estáticos. Você deve buscar os dados do seu banco de dados.
+            var data = google.visualization.arrayToDataTable([
+                ['CD', 'Vendas'],
+                ['CD2', 100], // Substitua pelos seus dados reais
+                ['CD3', 75],
+                ['CD4', 120],
+                ['CD5', 90]
+            ]);
 
-        <?php
-        include 'config.php';
+            var options = {
+                chart: {
+                    title: 'CDs Mais Vendidos',
+                    subtitle: 'Vendas por CD',
+                },
+                bars: 'horizontal'
+            };
 
-        $sql = "SELECT produto, SUM(Totalp) AS quantidade_vendida FROM Compra GROUP BY produto ORDER BY quantidade_vendida DESC LIMIT 10";
-        $result = mysqli_query($config, $sql);
+            var chart = new google.charts.Bar(document.getElementById('barchart_material'));
 
-        while ($row = mysqli_fetch_assoc($result)) {
-          $produto = $row['produto'];
-          $quantidade = (int)$row['quantidade_vendida'];
-          echo "data.addRow(['$produto', $quantidade]);";
+            chart.draw(data, google.charts.Bar.convertOptions(options));
         }
-        ?>
-        
-        var options = {
-          chart: {
-            title: 'Produtos Mais Vendidos',
-            subtitle: 'Quantidade Vendida',
-          },
-          bars: 'horizontal' // Gráfico de barras horizontais
-        };
-
-        var chart = new google.charts.Bar(document.getElementById('barchart_material'));
-
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-      }
     </script>
-  </head>
-  <body>
+</head>
+<body>
     <div id="barchart_material" style="width: 900px; height: 500px;"></div>
-  </body>
+</body>
 </html>
